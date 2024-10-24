@@ -1,0 +1,8 @@
+primary_region = "ams"
+
+[env]
+"discovery.type" = "single-node"
+
+[mounts]
+source="opensearch_storage"
+destination="/usr/share/opensearch/data"

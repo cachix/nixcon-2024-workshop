@@ -1,0 +1,35 @@
+[package]
+name = "backend-rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+default-run = "backend-rs"
+
+[[bin]]
+name = "gen-openapi"
+path = "src/gen_openapi.rs"
+
+[dependencies]
+anyhow = "1.0.86"
+axum = { version = "0.7", features = ["tracing"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+dotenv = "0.15"
+http = "1.1.0"
+opensearch = "2.2"
+serde = "1.0"
+serde_json = "1.0"
+sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "chrono"] }
+thiserror = "1.0.65"
+tokio = { version = "1.37", features = ["full"] }
+tower-http = { version = "0.5", features = ["trace", "cors"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+utoipa = { version = "5.1.2", features = ["chrono", "yaml"] }
+
+[dev-dependencies]
+http-body-util = "0.1"
+tower = "0.4"
+reqwest = "0.12.5"
+url = "2.5.2"
