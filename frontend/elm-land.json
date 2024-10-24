@@ -1,0 +1,30 @@
+{
+  "app": {
+    "elm": {
+      "development": { "debugger": true },
+      "production": { "debugger": false }
+    },
+    "env": [],
+    "html": {
+      "attributes": {
+        "html": { "lang": "en", "class": "bg-slate-50 antialiased" },
+        "head": {}
+      },
+      "title": "flakestry.dev",
+      "meta": [
+        { "charset": "UTF-8" },
+        { "http-equiv": "X-UA-Compatible", "content": "IE=edge" },
+        { "name": "viewport", "content": "width=device-width, initial-scale=1.0" }
+      ],
+      "link": [
+        { "rel": "stylesheet", "href": "https://rsms.me/inter/inter.css" },
+        { "rel": "stylesheet", "href": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css"},
+        { "rel": "icon", "type": "image/x-icon", "href": "/logo.png" }
+      ],
+      "script": []
+    },
+    "router": {
+      "useHashRouting": false
+    }
+  }
+}

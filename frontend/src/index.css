@@ -1,0 +1,31 @@
+@import "github-markdown-css/github-markdown-light.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GitHub Markdown overrides */
+
+.markdown-body [href$="#gh-dark-mode-only"] {
+  display: none;
+}
+
+.markdown-body
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+  /* Undo "display: block" to match GitHub's placement */
+  display: revert;
+}
+
+.markdown-body ul {
+  list-style: revert;
+}
+
+.markdown-body ol {
+  list-style: revert;
+}
