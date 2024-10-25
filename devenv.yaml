@@ -1,13 +1,15 @@
 inputs:
+  devenv:
+    url: github:cachix/devenv/pre-commit-rust?dir=src/modules
   fenix:
     url: github:sandydoo/fenix/patch-rust-analyzer-preview
     inputs:
       nixpkgs:
         follows: nixpkgs
+  mk-shell-bin:
+    url: github:rrbutani/nix-mk-shell-bin
   nix2container:
     url: github:nlewo/nix2container
     inputs:
       nixpkgs:
         follows: nixpkgs
-  mk-shell-bin:
-    url: github:rrbutani/nix-mk-shell-bin

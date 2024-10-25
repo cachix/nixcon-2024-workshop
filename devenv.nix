@@ -1,22 +1,23 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 {
-  env.DATABASE_URL = "postgres://sander@localhost:5431/flakestry";
+  env.DATABASE_URL = "postgres://localhost:5431/flakestry";
   env.BASE_PATH = "localhost:3000";
 
-  packages = [
-    pkgs.openssl
-    pkgs.cargo-watch
-    pkgs.elmPackages.elm-land
-    pkgs.sqlx-cli
-    pkgs.flyctl
-    pkgs.openapi-generator-cli
-  ]
-  ++ lib.optionals pkgs.stdenv.isDarwin [
-    pkgs.darwin.CF
-    pkgs.darwin.Security
-    pkgs.darwin.configd
-    pkgs.darwin.dyld
-  ];
+  packages =
+    [
+      pkgs.openssl
+      pkgs.cargo-watch
+      pkgs.elmPackages.elm-land
+      pkgs.sqlx-cli
+      pkgs.flyctl
+      pkgs.openapi-generator-cli
+    ]
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.darwin.CF
+      pkgs.darwin.Security
+      pkgs.darwin.configd
+      pkgs.darwin.dyld
+    ];
 
   languages.javascript = {
     enable = true;
@@ -36,16 +37,12 @@
     enable = true;
     listen_addresses = "localhost";
     port = 5431;
-    initialDatabases = [
-      {
-        name = "flakestry";
-      }
-    ];
+    initialDatabases = [ { name = "flakestry"; } ];
   };
   services.caddy.enable = true;
-  services.caddy.virtualHosts.":8888" = {
+  services.caddy.virtualHosts.":8080" = {
     extraConfig = ''
-      root * ${config.devenv.root}/frontend/dist
+      root * frontend/dist
 
       route {
         handle_path /api/* {
@@ -69,12 +66,12 @@
 
     echo generating frontend/generated-api
     openapi-generator-cli generate \
-      --input-spec ${config.devenv.root}/backend-rs/openapi.json \
+      --input-spec backend/openapi.json \
       --enable-post-process-file \
       --generator-name elm \
-      --template-dir ${config.devenv.root}/frontend/templates \
+      --template-dir frontend/templates \
       --type-mappings object=JsonObject \
-      --output ${config.devenv.root}/frontend/generated-api
+      --output frontend/generated-api
   '';
 
   scripts.generate-openapi.exec = ''
@@ -88,19 +85,26 @@
   };
 
   processes = {
-    backend.exec = "cd backend && cargo watch -x run";
+    backend = {
+      exec = "cd backend && cargo watch -x run";
+      process-compose.depends_on = {
+        opensearch.condition = "process_healthy";
+        postgres.condition = "process_healthy";
+      };
+    };
     frontend.exec = "cd frontend && elm-land server";
   };
 
-  # containers.staging = mkContainer "staging";
-  # containers.production = mkContainer "production";
+  pre-commit = {
+    hooks = {
+      rustfmt.enable = true;
+      # TODO: upstream
+      # rustfmt.packageOverrides.rustfmt = config.languages.rust.toolchain.rustfmt;
 
-  pre-commit.settings.rust.cargoManifestPath = "./backend/Cargo.toml";
-
-  pre-commit.hooks = {
-    rustfmt.enable = true;
-    shellcheck.enable = true;
-    nixfmt-rfc-style.enable = true;
-    elm-format.enable = true;
+      shellcheck.enable = true;
+      nixfmt-rfc-style.enable = true;
+      elm-format.enable = true;
+    };
+    settings.rust.cargoManifestPath = "./backend/Cargo.toml";
   };
 }
