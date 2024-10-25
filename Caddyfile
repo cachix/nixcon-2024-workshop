@@ -1,0 +1,11 @@
+:8888 {
+    root * frontend/dist
+
+    route {
+        handle_path /api/* {
+        reverse_proxy localhost:3000
+    }
+
+    reverse_proxy localhost:1234
+  }
+}

@@ -2,42 +2,75 @@
 
 A public registry of Nix flakes aiming to supersede [search.nixos.org](https://search.nixos.org/flakes).
 
-Built using [elm.land](https://elm.land/) and [FastAPI](https://fastapi.tiangolo.com/).
+Built using [elm.land](https://elm.land/) and [Axum](https://github.com/tokio-rs/axum).
 
-Maintainers: [@domenkozar](https://github.com/domenkozar).
+Maintainers:
+  - [@domenkozar](https://github.com/domenkozar)
+  - [@sandydoo](https://github.com/sandydoo)
 
 ## Development
 
-1. [Install direnv](https://direnv.net/docs/installation.html)
+### Prerequisites
 
-2. [Install devenv](https://devenv.sh/getting-started/)
+You will need the following tools to build and run the project:
 
-   ```bash
-   nix profile install --accept-flake-config tarball+https://install.devenv.sh/latest
-   ```
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Elm](https://guide.elm-lang.org/install/elm.html)
+- [Elm Land](https://elm.land/guide/)
+- [Postgres](https://www.postgresql.org/download/)
+- [OpenSearch](https://opensearch.org/docs/latest/getting-started/install/)
+- [Caddy](https://caddyserver.com/docs/install)
+- [Docker](https://docs.docker.com/get-docker/)
+- [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator)
 
-3. Load the development environment:
+### Setup
 
-   ```bash
-   direnv allow
-   ```
+#### JavaScript
 
-4. Generate the Elm API:
+Install JavaScript dependencies:
 
-    ```bash
-    devenv shell generate-elm-api
-    ```
+```console
+npm install
+```
 
-5. Start the development server:
+#### Postgres
 
-   ```bash
-   devenv up
-   ```
+Launch a postgres instance and create the database:
 
-## Roadmap
+```console
+docker run --name flakestry-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+```
 
-- [x] [Show flake metadata like dependencies and packages for each flake](https://github.com/flakestry/flakestry.dev/issues/2).
+Create the database and run the migrations:
 
-- [ ] [Support uploading non-github flakes](https://github.com/flakestry/flakestry.dev/issues/1).
+```console
+DATABASE_URL=postgres://localhost:5432/postgres sqlx database setup
+```
 
-- [ ] Prototype [semantic versioning of flakes](https://github.com/NixOS/rfcs/pull/144).
+#### OpenSearch
+
+Launch an OpenSearch instance:
+
+```console
+docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:latest
+```
+
+### Caddy
+
+Launch the Caddy server:
+
+```console
+caddy run
+```
+
+#### Run the backend
+
+```console
+cd backend && cargo run
+```
+
+#### Run the frontend
+
+```console
+cd frontend && elm-land server
+```
