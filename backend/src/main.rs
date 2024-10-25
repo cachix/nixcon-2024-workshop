@@ -43,7 +43,9 @@ async fn main() {
         pool,
     });
 
-    let _ = create_flake_index(&state.opensearch).await;
+    create_flake_index(&state.opensearch)
+        .await
+        .expect("Failed to create opensearch indices");
 
     // run our app with hyper, listening globally on port 3000
     tracing::info!("Listening on 0.0.0.0:3000");
