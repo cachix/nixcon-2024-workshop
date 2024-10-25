@@ -113,7 +113,28 @@ Lets enable these languages in the `devenv.nix` file.
 
 {
 + languages.rust.enable = true;
-+ languages.javascript.enable = true;
++
++ languages.javascript = {
++   enable = true;
++   npm.install.enable = true;
++ };
++
 + languages.elm.enable = true;
 }
 ```
+
+> [!TIP]
+> You can switch different to a different channel by specifying the `channel` attribute.
+>
+> ```diff
+> - languages.rust.enable = true;
+> + languages.rust = {
+> +   enable = true;
+> +   channel = "stable";
+> + };
+> ```
+>
+> This feature uses fenix under the hood, which you can add as an input:
+> ```console
+> devenv inputs add fenix github:nix-community/fenix --follows nixpkgs
+> ```
