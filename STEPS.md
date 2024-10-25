@@ -55,6 +55,8 @@ hello from devenv
 git version 2.44.0
 ```
 
+Lets remove the default configuration and start from scratch.
+
 ```diff
 { pkgs, lib, config, inputs, ... }:
 
@@ -100,5 +102,18 @@ git version 2.44.0
 -  # pre-commit.hooks.shellcheck.enable = true;
 -
 -  # See full reference at https://devenv.sh/reference/options/
+}
+```
+
+We know from the README that we'll need `rust` for the backend, and `javascript` and `elm` for the frontend.
+Lets enable these languages in the `devenv.nix` file.
+
+```diff
+{ pkgs, lib, config, inputs, ... }:
+
+{
++ languages.rust.enable = true;
++ languages.javascript.enable = true;
++ languages.elm.enable = true;
 }
 ```
