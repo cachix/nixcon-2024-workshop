@@ -6,6 +6,7 @@ use thiserror::Error;
 
 pub struct AppState {
     pub opensearch: OpenSearch,
+    pub client: reqwest::Client,
     pub pool: PgPool,
 }
 
@@ -13,6 +14,9 @@ pub struct AppState {
 pub enum AppError {
     #[error("Resource not found")]
     NotFound,
+
+    #[error("Bad request: {0}")]
+    BadRequest(String),
 
     #[error(transparent)]
     Other(#[from] anyhow::Error),
@@ -26,6 +30,7 @@ impl IntoResponse for AppError {
         // Map error types to status codes
         let status = match &self {
             AppError::NotFound { .. } => StatusCode::NOT_FOUND,
+            AppError::BadRequest { .. } => StatusCode::BAD_REQUEST,
             AppError::Other { .. } => StatusCode::INTERNAL_SERVER_ERROR,
         };
 

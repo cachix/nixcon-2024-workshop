@@ -1,7 +1,7 @@
 CREATE TABLE githubowner (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    name TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE githubrepo (
@@ -9,7 +9,7 @@ CREATE TABLE githubrepo (
     name TEXT NOT NULL,
     description TEXT,
     owner_id INTEGER NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (owner_id) REFERENCES githubowner (id),
     CONSTRAINT unique_owner_name UNIQUE (owner_id, name)
 );
@@ -22,7 +22,7 @@ CREATE TABLE release (
     version TEXT NOT NULL,
     commit TEXT NOT NULL,
     description TEXT,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     meta_data JSONB DEFAULT '{}',
     meta_data_errors TEXT,
     outputs JSONB DEFAULT '{}',
@@ -33,4 +33,3 @@ CREATE TABLE release (
 
 CREATE INDEX idx_githubrepo_owner_id ON githubrepo (owner_id);
 CREATE INDEX idx_release_repo_id ON release (repo_id);
-

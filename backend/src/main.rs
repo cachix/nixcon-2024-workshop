@@ -11,6 +11,7 @@ use opensearch::{
     indices::{IndicesCreateParts, IndicesGetParts},
     OpenSearch,
 };
+use reqwest::Client;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, net::SocketAddr, sync::Arc};
 use tower_http::cors::{Any, CorsLayer};
@@ -28,7 +29,6 @@ async fn main() {
     dotenv::dotenv().ok();
 
     tracing_subscriber::registry()
-        .with(fmt::layer().with_target(false))
         .with(EnvFilter::from_default_env())
         .init();
 
@@ -40,6 +40,7 @@ async fn main() {
 
     let state = Arc::new(AppState {
         opensearch: OpenSearch::default(),
+        client: Client::new(),
         pool,
     });
 
@@ -78,16 +79,13 @@ fn app(state: Arc<AppState>) -> Router {
         // allow requests from any origin
         .allow_origin(Any);
 
-    let api = Router::new()
+    Router::new()
         .route("/flake", get(api::get_flake))
         .route("/flake/github/:owner", get(api::get_owner))
         .route("/flake/github/:owner/:repo", get(api::get_repo))
         .route("/flake/github/:owner/:repo/:version", get(api::get_version))
         .route("/publish", post(api::post_publish))
-        .route("/openapi.json", get(openapi));
-
-    Router::new()
-        .nest("/api", api)
+        .route("/openapi.json", get(openapi))
         .layer(cors)
         .layer(middleware::from_fn(add_ip_trace))
         .layer(

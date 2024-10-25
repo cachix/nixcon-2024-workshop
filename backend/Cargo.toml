@@ -9,15 +9,23 @@ default-run = "backend-rs"
 
 [[bin]]
 name = "gen-openapi"
-path = "src/gen_openapi.rs"
+path = "src/bin/gen_openapi.rs"
+
+[[bin]]
+name = "publish"
+path = "src/bin/publish.rs"
 
 [dependencies]
 anyhow = "1.0.86"
 axum = { version = "0.7", features = ["tracing"] }
+base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
 dotenv = "0.15"
 http = "1.1.0"
+octocrab = "0.41.2"
 opensearch = "2.2"
+regex = "1.11.1"
+reqwest = { version = "0.12.5", features = ["json"] }
 serde = "1.0"
 serde_json = "1.0"
 sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "chrono"] }

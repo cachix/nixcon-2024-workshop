@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   env.DATABASE_URL = "postgres://localhost:5431/flakestry";
-  env.BASE_PATH = "localhost:3000";
+  env.BASE_PATH = "localhost:8888/api";
 
   packages =
     [
@@ -40,7 +40,7 @@
     initialDatabases = [ { name = "flakestry"; } ];
   };
   services.caddy.enable = true;
-  services.caddy.virtualHosts.":8080" = {
+  services.caddy.virtualHosts.":8888" = {
     extraConfig = ''
       root * frontend/dist
 

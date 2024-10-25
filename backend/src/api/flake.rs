@@ -64,20 +64,20 @@ impl FromRow<'_, PgRow> for FlakeRelease {
 #[derive(serde::Serialize, utoipa::ToSchema)]
 pub struct Release {
     #[serde(skip_serializing)]
-    id: i32,
-    repo_id: i32,
-    readme_filename: Option<String>,
-    readme: Option<String>,
-    version: String,
-    commit: String,
-    description: Option<String>,
-    created_at: NaiveDateTime,
+    pub id: i32,
+    pub repo_id: i32,
+    pub readme_filename: Option<String>,
+    pub readme: Option<String>,
+    pub version: String,
+    pub commit: String,
+    pub description: Option<String>,
+    pub created_at: NaiveDateTime,
     #[schema(value_type = Option<Object>)]
-    meta_data: Option<Value>,
-    meta_data_errors: Option<Vec<String>>,
+    pub meta_data: Option<Value>,
+    pub meta_data_errors: Option<Vec<String>>,
     #[schema(value_type = Option<Object>)]
-    outputs: Option<Value>,
-    outputs_errors: Option<Vec<String>>,
+    pub outputs: Option<Value>,
+    pub outputs_errors: Option<Vec<String>>,
 }
 
 impl FromRow<'_, PgRow> for Release {
@@ -118,7 +118,7 @@ pub struct GetRepoResponse {
 
 #[utoipa::path(
         get,
-        path = "/api/flake",
+        path = "/flake",
         responses(
             (status = 200, description = "", body = GetFlakeResponse)
         ),
@@ -158,7 +158,7 @@ pub async fn get_flake(
 
 #[utoipa::path(
         get,
-        path = "/api/flake/github/{owner}",
+        path = "/flake/github/{owner}",
         responses(
             (status = 200, description = "", body = GetOwnerResponse)
         ),
@@ -177,7 +177,7 @@ pub async fn get_owner(
 
 #[utoipa::path(
         get,
-        path = "/api/flake/github/{owner}/{repo}",
+        path = "/flake/github/{owner}/{repo}",
         responses(
             (status = 200, description = "", body = GetRepoResponse)
         ),
@@ -197,7 +197,7 @@ pub async fn get_repo(
 
 #[utoipa::path(
         get,
-        path = "/api/flake/github/{owner}/{repo}/{version}",
+        path = "/flake/github/{owner}/{repo}/{version}",
         responses(
             (status = 200, description = "", body = Release)
         ),
