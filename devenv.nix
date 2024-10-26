@@ -1,7 +1,6 @@
 { pkgs, lib, ... }:
 {
-  env.DATABASE_URL = "postgres://localhost:5431/flakestry";
-  env.BASE_PATH = "localhost:8888/api";
+  dotenv.enable = true;
 
   packages =
     [
@@ -40,19 +39,7 @@
     initialDatabases = [ { name = "flakestry"; } ];
   };
   services.caddy.enable = true;
-  services.caddy.virtualHosts.":8888" = {
-    extraConfig = ''
-      root * frontend/dist
-
-      route {
-        handle_path /api/* {
-          reverse_proxy localhost:3000
-        }
-
-        reverse_proxy localhost:1234
-      }
-    '';
-  };
+  services.caddy.config = builtins.readFile ./Caddyfile;
 
   enterTest = ''
     pushd backend

@@ -117,7 +117,6 @@ pub async fn post_publish(
     )
     .await
     .unwrap_or_default();
-    // let readme = Some(String::from("HELLO"));
 
     let release = create_release(
         &state.pool,
@@ -237,14 +236,23 @@ async fn get_readme(
     ref_: &str,
     path: &str,
 ) -> Result<Option<String>, octocrab::Error> {
-    octocrab
+    use base64::prelude::*;
+
+    let readme = octocrab
         .repos(owner, repo)
         .get_readme()
         // .path(path)
         .r#ref(ref_)
         .send()
-        .await
-        .map(|readme| readme.content)
+        .await?;
+
+    if let Some(content) = readme.content {
+        if let Ok(decoded) = BASE64_STANDARD.decode(content.replace('\n', "")) {
+            return Ok(String::from_utf8(decoded).ok());
+        }
+    }
+
+    Ok(None)
 }
 
 async fn create_release(
@@ -321,7 +329,7 @@ async fn index_release(
     });
 
     opensearch
-        .index(IndexParts::IndexId("flake", &release.id.to_string()))
+        .index(IndexParts::IndexId("flakes", &release.id.to_string()))
         .body(document)
         .refresh(opensearch::params::Refresh::True)
         .send()

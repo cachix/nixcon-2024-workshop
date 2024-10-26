@@ -1,8 +1,6 @@
 primary_region = "ams"
 
 [deploy]
-  # If the health check goes into a critical state and won't recover, switch back to "rolling" and re-deploy.
-  # Then switch back to "bluegreen".
   strategy = "bluegreen"
 
 [http_service]
