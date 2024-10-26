@@ -5,24 +5,24 @@ use reqwest::Client;
 async fn main() {
     let token = std::env::var("GITHUB_TOKEN").expect("Provide a GITHUB_TOKEN");
 
-    let octocrab = octocrab::Octocrab::builder()
-        .personal_token(token.clone())
-        .build()
-        .unwrap();
-    let readme = octocrab
-        .repos("nixos", "nixpkgs")
-        .get_readme()
-        // .path(path)
-        .r#ref("18d2b0153d00e9735b1c535db60a39681d83ed2e")
-        .send()
-        .await
-        .unwrap();
+    // let octocrab = octocrab::Octocrab::builder()
+    //     .personal_token(token.clone())
+    //     .build()
+    //     .unwrap();
+    // let readme = octocrab
+    //     .repos("nixos", "nixpkgs")
+    //     .get_readme()
+    //     // .path(path)
+    //     .r#ref("18d2b0153d00e9735b1c535db60a39681d83ed2e")
+    //     .send()
+    //     .await
+    //     .unwrap();
 
-    use base64::prelude::*;
-    let content = BASE64_STANDARD
-        .decode(readme.content.unwrap().as_bytes())
-        .unwrap();
-    eprintln!("{:?}", content);
+    // use base64::prelude::*;
+    // let content = BASE64_STANDARD
+    //     .decode(readme.content.unwrap().as_bytes())
+    //     .unwrap();
+    // eprintln!("{:?}", content);
 
     let client = Client::builder()
         .danger_accept_invalid_certs(true)

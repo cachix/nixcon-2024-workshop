@@ -349,6 +349,7 @@ async fn get_release_by_owner_repo_version(
 async fn search_flakes(opensearch: &OpenSearch, q: &String) -> Result<HashMap<i32, f64>, AppError> {
     let res = opensearch
         .search(SearchParts::Index(&["flakes"]))
+        .from(0)
         .size(10)
         .body(json!({
             "query": {
@@ -360,8 +361,8 @@ async fn search_flakes(opensearch: &OpenSearch, q: &String) -> Result<HashMap<i3
                         "readme",
                         "outputs",
                         "repo^2",
-                        "owner^2",
-                    ],
+                        "owner^2"
+                    ]
                 }
             }
         }))

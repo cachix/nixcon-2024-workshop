@@ -321,7 +321,7 @@ async fn index_release(
     });
 
     opensearch
-        .index(IndexParts::IndexId("flake", &release.id.to_string()))
+        .index(IndexParts::IndexId("flakes", &release.id.to_string()))
         .body(document)
         .refresh(opensearch::params::Refresh::True)
         .send()
