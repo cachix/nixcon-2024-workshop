@@ -15,6 +15,8 @@ Maintainers:
 You will need the following tools to build and run the project:
 
 - [Rust](https://www.rust-lang.org/tools/install)
+- [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [TypeScript](https://www.typescriptlang.org/download)
 - [Elm](https://guide.elm-lang.org/install/elm.html)
 - [Elm Land](https://elm.land/guide/)
 - [Postgres](https://www.postgresql.org/download/)
@@ -44,7 +46,7 @@ docker run --name flakestry-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 
 Create the database and run the migrations:
 
 ```console
-DATABASE_URL=postgres://localhost:5432/postgres sqlx database setup
+DATABASE_URL=postgres://localhost:5432/flakestry sqlx database setup
 ```
 
 #### OpenSearch

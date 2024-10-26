@@ -2,7 +2,9 @@
 
 ## Devenv workshop
 
-During the workshop, we'll try to create a development environment for a real-world Rust project using devenv.
+During the workshop, we'll try to create a development environment for a real-world Rust project with devenv.
+
+https://devenv.sh/
 
 ### Prerequisites
 
@@ -13,7 +15,7 @@ Here's what you'll need for this workshop:
 - devenv
 - direnv (optional)
 
-If you haven't yet installed Nix or devenv,  follow the instructions for your platform from https://devenv.sh/getting-started/.
+If you haven't yet installed Nix or devenv, follow the instructions for your platform on https://devenv.sh/getting-started/.
 
 ### Clone the repo
 
@@ -105,7 +107,12 @@ Lets remove the default configuration and start from scratch.
 }
 ```
 
-We know from the README that we'll need `rust` for the backend, and `javascript` and `elm` for the frontend.
+### Language support
+
+> [!DOCS]
+> https://devenv.sh/languages/
+
+We know from the README that we'll need `rust` for the backend, and `javascript`/`typescript` and `elm` for the frontend.
 Lets enable these languages in the `devenv.nix` file.
 
 ```diff
@@ -119,12 +126,14 @@ Lets enable these languages in the `devenv.nix` file.
 +   npm.install.enable = true;
 + };
 +
++ languages.typescript.enable = true;
++
 + languages.elm.enable = true;
 }
 ```
 
 > [!TIP]
-> You can switch different to a different channel by specifying the `channel` attribute.
+> You can switch to a different channel by specifying the `channel` attribute.
 >
 > ```diff
 > - languages.rust.enable = true;
@@ -134,7 +143,16 @@ Lets enable these languages in the `devenv.nix` file.
 > + };
 > ```
 >
-> This feature uses fenix under the hood, which you can add as an input:
+> This feature uses [nix-community/fenix][fenix] under the hood.
+> devenv will prompt you do add it as an input to your `devenv.yaml`.
+> You can do so throught the command-line:
+>
 > ```console
 > devenv inputs add fenix github:nix-community/fenix --follows nixpkgs
 > ```
+
+### Services
+
+
+
+[fenix]: https://github.com/nix-community/fenix
