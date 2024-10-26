@@ -473,21 +473,22 @@ viewOutputs model flakeRelease =
                             , tab "Inputs" "inputs" Octicons.package
                             ]
                         ]
-                    , span [ class "ml-4 mt-4 inline-block" ]
-                        [ img [ src badgeImage, class "inline-block" ] []
-                        ]
-                    , button
-                        [ class "ml-2 clipboard inline-flex text-sm text-gray-900 font-medium p-2 shadow-sm rounded border border-gray-300 hover:bg-blue-600 hover:text-white hover:border-white"
-                        , type_ "button"
-                        , title "Copy badge markdown to clipboard"
-                        , attribute "data-clipboard-text" badgeMarkdown
-                        ]
-                        [ Octicons.defaultOptions
-                            |> Octicons.color "currentColor"
-                            |> Octicons.size 10
-                            |> Octicons.class "inline"
-                            |> Octicons.clippy
-                        ]
+
+                    -- , span [ class "ml-4 mt-4 inline-block" ]
+                    --     [ img [ src badgeImage, class "inline-block" ] []
+                    --     ]
+                    -- , button
+                    --     [ class "ml-2 clipboard inline-flex text-sm text-gray-900 font-medium p-2 shadow-sm rounded border border-gray-300 hover:bg-blue-600 hover:text-white hover:border-white"
+                    --     , type_ "button"
+                    --     , title "Copy badge markdown to clipboard"
+                    --     , attribute "data-clipboard-text" badgeMarkdown
+                    --     ]
+                    --     [ Octicons.defaultOptions
+                    --         |> Octicons.color "currentColor"
+                    --         |> Octicons.size 10
+                    --         |> Octicons.class "inline"
+                    --         |> Octicons.clippy
+                    --     ]
                     , case model.hash of
                         Just "inputs" ->
                             viewInputs release
