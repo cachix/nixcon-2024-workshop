@@ -173,7 +173,12 @@ languages.elm.enable = true;
 +
 + services.opensearch.enable = true;
 +
-+ services.postgres.enable = true;
++ services.postgres = {
++   enable = true;
++   listen_addresses = "localhost";
++   port = 5432;
++   initialDatabases = [ { name = "flakestry"; } ];
++ };
 ```
 
 Luanch the services with:
@@ -186,6 +191,45 @@ devenv up
 By default, this is [process-compose][process-compose], but we support several other implementations via `process.manager.implementation`.
 
 To bring down the processes, use `Ctrl+C + ENTER` or run `devenv processes down` in another terminal (in the same directory).
+
+### Custom processes
+
+Now that we've set up our services, we can start adding custom processes for our backend and frontend.
+We'll also add a few extra packages to our shell.
+
+```diff
+services.postgres = {
+  enable = true;
+  listen_addresses = "localhost";
+  port = 5432;
+  initialDatabases = [ { name = "flakestry"; } ];
+};
++
++ packages = [
++   pkgs.openssl
++   pkgs.sqlx-cli
++   pkgs.cargo-watch
++   pkgs.elmPackages.elm-land
++ ];
++
++ processes.backend.exec = "cd backend && cargo watch -x run";
++ processes.frontend.exec = "cd frontend && elm-land server"
+```
+
+We can leverage the `depends_on` feature of `process-compose` to record our dependencies.
+This will ensure that the backend process only starts after the `opensearch` and `postgres` services are healthy.
+
+```diff
+- processes.backend.exec = "cd backend && cargo watch -x run";
++ processes.backend = {
++   exec = "cd backend && cargo watch -x run";
++   process-compose.depends_on = {
++     opensearch.condition = "process_healthy";
++     postgres.condition = "process_healthy";
++   };
++ };
++
+```
 
 [fenix]: https://github.com/nix-community/fenix
 [process-compose]: https://devenv.sh/supported-process-managers/process-compose/

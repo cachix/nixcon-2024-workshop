@@ -359,12 +359,10 @@ async fn search_flakes(opensearch: &OpenSearch, q: &String) -> Result<HashMap<i3
                   "multi_match": {
                     "query": q,
                     "fields": [
-                      "description",
+                      "description^2",
                       "readme",
                       "outputs"
                     ],
-                    "type": "best_fields",
-                    "operator": "and",
                     "fuzziness": "AUTO"
                   }
                 },
