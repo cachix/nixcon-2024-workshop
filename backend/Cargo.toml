@@ -20,6 +20,7 @@ anyhow = "1.0.86"
 axum = { version = "0.7", features = ["tracing"] }
 base64 = "0.22.1"
 chrono = { version = "0.4.38", features = ["serde"] }
+clap = { version = "4.5.20", features = ["derive"] }
 dotenv = "0.15"
 http = "1.1.0"
 octocrab = "0.41.2"

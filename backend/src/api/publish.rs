@@ -95,13 +95,6 @@ pub async fn post_publish(
     let owner = get_or_create_owner(&state.pool, &owner_name).await?;
     let repo = get_or_create_repo(&state.pool, &repository_name, owner.id).await?;
 
-    // if version_exists(&state.pool, &version, repo.id).await? {
-    //     return Err(AppError::BadRequest(format!(
-    //         "Version {} already exists",
-    //         version
-    //     )));
-    // }
-
     let description = publish
         .metadata
         .as_ref()
@@ -165,7 +158,6 @@ async fn get_or_create_owner(pool: &PgPool, name: &str) -> Result<GitHubOwner, A
     .fetch_one(pool)
     .await
     .unwrap();
-    // .context("Failed to fetch owner from database")?;
 
     Ok(owner)
 }
@@ -211,22 +203,8 @@ async fn get_or_create_repo(
     .fetch_one(pool)
     .await
     .unwrap();
-    // .context("Failed to create or fetch repo from database")?;
 
     Ok(repo)
-}
-
-async fn version_exists(pool: &PgPool, version: &str, repo_id: i32) -> Result<bool, AppError> {
-    let exists = sqlx::query_scalar::<_, bool>(
-        "SELECT EXISTS(SELECT 1 FROM release WHERE version = $1 AND repo_id = $2)",
-    )
-    .bind(version)
-    .bind(repo_id)
-    .fetch_one(pool)
-    .await
-    .context("Failed to check if version exists in database")?;
-
-    Ok(exists)
 }
 
 async fn get_readme(

@@ -1,9 +1,26 @@
 use backend_rs::api::Publish;
+use clap::Parser;
 use reqwest::Client;
+
+#[derive(Parser, Debug)]
+struct Cli {
+    #[arg(short, long)]
+    owner: String,
+
+    #[arg(short, long)]
+    repo: String,
+
+    #[arg(long, name = "ref")]
+    ref_: Option<String>,
+
+    #[arg(short, long)]
+    version: Option<String>,
+}
 
 #[tokio::main]
 async fn main() {
     let token = std::env::var("GITHUB_TOKEN").expect("Provide a GITHUB_TOKEN");
+    let args = Cli::parse();
 
     let client = Client::builder()
         .danger_accept_invalid_certs(true)
@@ -11,10 +28,10 @@ async fn main() {
         .unwrap();
 
     let publish = Publish {
-        owner: "nixos".to_string(),
-        repository: "nixpkgs".to_string(),
-        ref_: Some("18d2b0153d00e9735b1c535db60a39681d83ed2e".to_string()),
-        version: None,
+        owner: args.owner,
+        repository: args.repo,
+        ref_: args.ref_,
+        version: args.version,
         metadata: Some(serde_json::json!({})),
         metadata_errors: None,
         readme: None,
