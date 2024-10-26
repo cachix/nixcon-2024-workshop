@@ -94,11 +94,13 @@ pub async fn post_publish(
     let owner = get_or_create_owner(&state.pool, &owner_name).await?;
     let repo = get_or_create_repo(&state.pool, &repository_name, owner.id).await?;
 
-    let description = publish
-        .metadata
-        .as_ref()
-        .and_then(|m| m.get("description").and_then(|d| d.as_str()))
-        .map(String::from);
+    let description = octocrab
+        .repos(&owner_name, &repository_name)
+        .get()
+        .await
+        .map(|r| r.description)
+        .unwrap_or_default();
+
     let readme_path = publish.readme.clone().unwrap_or("README.md".into());
     let readme = get_readme(
         &octocrab,
