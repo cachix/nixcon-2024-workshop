@@ -14,7 +14,6 @@
     "@types/dompurify": "^3.0.4",
     "autoprefixer": "^10.4.13",
     "cssnano": "^5.1.14",
-    "elm-land": "*",
     "github-markdown-css": "^5.4.0",
     "postcss": "^8.4.21",
     "postcss-import": "^15.1.0",
