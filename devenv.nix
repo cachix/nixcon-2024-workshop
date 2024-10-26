@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 {
-  dotenv.enable = true;
+  env.DATABASE_URL = "postgres://localhost:5431/flakestry";
+  env.BASE_PATH = "localhost:8888/api";
 
   packages =
     [
