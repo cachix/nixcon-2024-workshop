@@ -1,4 +1,3 @@
-use anyhow::Context;
 use axum::{
     extract::{Json, State},
     http::HeaderMap,
@@ -212,7 +211,7 @@ async fn get_readme(
     owner: &str,
     repo: &str,
     ref_: &str,
-    path: &str,
+    _path: &str,
 ) -> Result<Option<String>, octocrab::Error> {
     use base64::prelude::*;
 
