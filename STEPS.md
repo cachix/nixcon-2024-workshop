@@ -109,7 +109,7 @@ Lets remove the default configuration and start from scratch.
 
 ### Language support
 
-> [!DOCS]
+> [!NOTE]
 > https://devenv.sh/languages/
 
 We know from the README that we'll need `rust` for the backend, and `javascript`/`typescript` and `elm` for the frontend.
