@@ -47,6 +47,12 @@
     popd
   '';
 
+  enterShell = ''
+    echo "Entering shell"
+    cargo --version
+    elm-land --version
+  '';
+
   # Generate the Elm API client
   scripts.generate-elm-api.exec = ''
     generate-openapi
