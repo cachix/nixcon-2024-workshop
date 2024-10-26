@@ -69,6 +69,8 @@
     sqlx migrate run
   '';
 
+  scripts.flakestry-publish.exec = "cd backend && cargo run --bin publish -- $@";
+
   processes = {
     backend = {
       exec = "cd backend && cargo watch -x run";
