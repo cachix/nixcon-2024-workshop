@@ -110,7 +110,7 @@ Lets remove the default configuration and start from scratch.
 ### Language support
 
 > [!NOTE]
-> https://devenv.sh/languages/
+> docs: https://devenv.sh/languages/
 
 We know from the README that we'll need `rust` for the backend, and `javascript`/`typescript` and `elm` for the frontend.
 Lets enable these languages in the `devenv.nix` file.
@@ -155,6 +155,9 @@ Lets enable these languages in the `devenv.nix` file.
 
 ### Services
 
+> [!NOTE]
+> docs: https://devenv.sh/services/
+
 This project relies on 3 main services:
 
 - PostgreSQL as the main database.
@@ -193,6 +196,9 @@ By default, this is [process-compose][process-compose], but we support several o
 To bring down the processes, use `Ctrl+C + ENTER` or run `devenv processes down` in another terminal (in the same directory).
 
 ### Custom processes
+
+> [!NOTE]
+> docs: https://devenv.sh/processes/
 
 Now that we've set up our services, we can start adding custom processes for our backend and frontend.
 We'll also add a few extra packages to our shell.
