@@ -84,7 +84,7 @@ pub async fn post_publish(
         .commit
         .committer
         .and_then(|c| c.date)
-        .unwrap_or_else(|| Utc::now());
+        .unwrap_or_else(Utc::now);
 
     let version = publish
         .version
