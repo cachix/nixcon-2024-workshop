@@ -25,9 +25,8 @@ git clone https://github.com/cachix/nixcon-2024-workshop && cd nixcon-2024-works
 
 ### Explore the README
 
-Projects out in the wild
-
-
+Projects out in the wild will often list their dependencies, setup steps, and other useful information in the `README.md`.
+This repo has a [`PROJECT_README.md`][project-readme] that lists these requirements.
 
 ### Initialize devenv
 
@@ -40,7 +39,7 @@ devenv init
 This will create the following two files:
 
 - `devenv.nix`: used to specify your developer environment in Nix.
-- `devenv.yaml`: lets you specify dependencies, or inputs, for your project.
+- `devenv.yaml`: lets you specify dependencies on other source repositories, flakes, etc, much in the style in flake inputs.
 
 If you have `direnv` installed, the shell will automatically start loading after this command.
 You can also manually load the environment with:
@@ -107,6 +106,27 @@ Lets remove the default configuration and start from scratch.
 }
 ```
 
+### Dotenv support
+
+You may have noticed a notification that `devenv` has detected a `.env` file in the project.
+This file contains environment variables that are used to configure the project.
+
+We can load them into our environment with the `dotenv` integration:
+
+```diff
+{ pkgs, lib, config, inputs, ... }:
+
+{
++  dotenv.enable = true;
+}
+```
+
+```console
+$ echo $DATABASE_URL
+postgres://localhost:5431/flakestry
+
+```
+
 ### Language support
 
 > [!NOTE]
@@ -133,7 +153,7 @@ Lets enable these languages in the `devenv.nix` file.
 ```
 
 > [!TIP]
-> Some languages support more extensive versioning support that what is available in nixpkgs.
+> Some languages support more extensive versioning support than what is available in nixpkgs.
 >
 > For example, the Rust integration supports using a specific channel or an entirely custom toolchain.
 >
@@ -239,3 +259,4 @@ This will ensure that the backend process only starts after the `opensearch` and
 
 [fenix]: https://github.com/nix-community/fenix
 [process-compose]: https://devenv.sh/supported-process-managers/process-compose/
+[project-readme]: ./PROJECT_README.md
