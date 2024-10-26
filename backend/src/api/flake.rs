@@ -352,19 +352,59 @@ async fn search_flakes(opensearch: &OpenSearch, q: &String) -> Result<HashMap<i3
         .from(0)
         .size(10)
         .body(json!({
-            "query": {
-                "multi_match": {
+          "query": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
                     "query": q,
-                    "fuzziness": "AUTO",
                     "fields": [
-                        "description^2",
-                        "readme",
-                        "outputs",
-                        "repo^2",
-                        "owner^2"
-                    ]
+                      "description",
+                      "readme",
+                      "outputs"
+                    ],
+                    "type": "best_fields",
+                    "operator": "and",
+                    "fuzziness": "AUTO"
+                  }
+                },
+                {
+                  "match_phrase_prefix": {
+                    "repo": {
+                      "query": q,
+                      "slop": 2,
+                      "max_expansions": 50
+                    }
+                  }
+                },
+                {
+                  "match_phrase_prefix": {
+                    "owner": {
+                      "query": q,
+                      "slop": 2,
+                      "max_expansions": 50
+                    }
+                  }
+                },
+                {
+                  "wildcard": {
+                    "repo": {
+                      "value": format!("*{}*", q),
+                      "case_insensitive": true
+                    }
+                  }
+                },
+                {
+                  "wildcard": {
+                    "owner": {
+                      "value": format!("*{}*", q),
+                      "case_insensitive": true
+                    }
+                  }
                 }
+              ]
             }
+          }
         }))
         .send()
         .await
