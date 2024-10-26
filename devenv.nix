@@ -39,19 +39,7 @@
     initialDatabases = [ { name = "flakestry"; } ];
   };
   services.caddy.enable = true;
-  services.caddy.virtualHosts.":8888" = {
-    extraConfig = ''
-      root * frontend/dist
-
-      route {
-        handle_path /api/* {
-          reverse_proxy localhost:3000
-        }
-
-        reverse_proxy localhost:1234
-      }
-    '';
-  };
+  services.caddy.config = builtins.readFile ./Caddyfile;
 
   enterTest = ''
     pushd backend

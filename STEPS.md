@@ -133,7 +133,9 @@ Lets enable these languages in the `devenv.nix` file.
 ```
 
 > [!TIP]
-> You can switch to a different channel by specifying the `channel` attribute.
+> Some languages support more extensive versioning support that what is available in nixpkgs.
+>
+> For example, the Rust integration supports using a specific channel or an entirely custom toolchain.
 >
 > ```diff
 > - languages.rust.enable = true;
@@ -153,6 +155,37 @@ Lets enable these languages in the `devenv.nix` file.
 
 ### Services
 
+This project relies on 3 main services:
 
+- PostgreSQL as the main database.
+- OpenSearch for indexing and searching for releases.
+- Caddy as a reverse proxy for the frontend and backend.
+
+Lets enable these services in the `devenv.nix` file.
+
+```diff
+languages.typescript.enable = true;
+
+languages.elm.enable = true;
++
++ services.caddy.enable = true;
++ services.caddy.config = builtins.readFile ./Caddyfile;
++
++ services.opensearch.enable = true;
++
++ services.postgres.enable = true;
+```
+
+Luanch the services with:
+
+```console
+devenv up
+```
+
+`devenv` will configure and launch the processes in an interactive `process manager`.
+By default, this is [process-compose][process-compose], but we support several other implementations via `process.manager.implementation`.
+
+To bring down the processes, use `Ctrl+C + ENTER` or run `devenv processes down` in another terminal (in the same directory).
 
 [fenix]: https://github.com/nix-community/fenix
+[process-compose]: https://devenv.sh/supported-process-managers/process-compose/
