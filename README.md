@@ -215,6 +215,21 @@ By default, this is [process-compose][process-compose], but we support several o
 
 To bring down the processes, use `Ctrl+C + ENTER` or run `devenv processes down` in another terminal (in the same directory).
 
+### Scripts
+
+You can also define custom bash scripts in `devenv.nix`.
+
+```diff
++ scripts.run-migrations.exec = "sqlx migrate run";
+```
+
+Scripts are available in the `devenv` shell by name.
+With postgres running, we can now run the migrations:
+
+```console
+run-migrations
+```
+
 ### Custom processes
 
 > [!NOTE]
@@ -242,7 +257,9 @@ services.postgres = {
 + processes.frontend.exec = "cd frontend && elm-land server"
 ```
 
-We can leverage the `depends_on` feature of `process-compose` to record our dependencies.
+The backend process might fail to initialize properly if the opensearch cluster is not ready at the time of launch.
+
+We can leverage the `depends_on` feature of `process-compose` to record this runtime ordering.
 This will ensure that the backend process only starts after the `opensearch` and `postgres` services are healthy.
 
 ```diff

@@ -65,11 +65,9 @@
     cd backend && cargo run --bin gen-openapi
   '';
 
-  tasks = {
-    "flakestry:migrate" = {
-      exec = "sqlx migrate run";
-    };
-  };
+  scripts.run-migrations.exec = ''
+    sqlx migrate run
+  '';
 
   processes = {
     backend = {
