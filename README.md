@@ -17,6 +17,17 @@ Here's what you'll need for this workshop:
 
 If you haven't yet installed Nix or devenv, follow the instructions for your platform on https://devenv.sh/getting-started/.
 
+### Set up a GitHub token
+
+To avoid getting rate-limited by GitHub, we recommend providing Nix with a GitHub API token.
+
+Create a new token with no extra permissions at https://github.com/settings/personal-access-tokens/new
+Add the token to your `~/.config/nix/nix.conf`:
+
+```
+access-tokens = github.com=<GITHUB_TOKEN>
+```
+
 ### Clone the repo
 
 ```console
