@@ -321,6 +321,9 @@ or if you have `gh` installed:
 
 ```console
 export GITHUB_TOKEN=$(gh auth token)
+```
+
+Let's try it out:
 
 ```
 flakestry-publish --owner nixos --repo nixpkgs --version 24.05
@@ -328,8 +331,7 @@ flakestry-publish --owner nixos --repo nixpkgs --version 24.05
 
 ### Final devenv.nix
 
-`devenv.nix`
-```nix
+```nix title="devenv.nix"
 { pkgs, lib, config, inputs, ... }:
 {
   dotenv.enable = true;
