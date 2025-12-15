@@ -17,6 +17,17 @@ Here's what you'll need for this workshop:
 
 If you haven't yet installed Nix or devenv, follow the instructions for your platform on https://devenv.sh/getting-started/.
 
+### Set up a GitHub token
+
+To avoid getting rate-limited by GitHub, we recommend providing Nix with a GitHub API token.
+
+Create a new token with no extra permissions at https://github.com/settings/personal-access-tokens/new
+Add the token to your `~/.config/nix/nix.conf`:
+
+```
+access-tokens = github.com=<GITHUB_TOKEN>
+```
+
 ### Clone the repo
 
 ```console
@@ -27,6 +38,8 @@ git clone https://github.com/cachix/nixcon-2024-workshop && cd nixcon-2024-works
 
 Projects out in the wild will often list their dependencies, setup steps, and other useful information in the `README.md`.
 This repo has a [`PROJECT_README.md`][project-readme] that lists these requirements.
+
+We're going to use the ad-hoc instructions to build up a developer environment powered by Nix.
 
 ### Initialize devenv
 
@@ -99,8 +112,8 @@ Lets remove the default configuration and start from scratch.
 -    git --version | grep --color=auto "${pkgs.git.version}"
 -  '';
 -
--  # https://devenv.sh/pre-commit-hooks/
--  # pre-commit.hooks.shellcheck.enable = true;
+-  # https://devenv.sh/git-hooks/
+-  # git-hooks.hooks.shellcheck.enable = true;
 -
 -  # See full reference at https://devenv.sh/reference/options/
 }
@@ -165,12 +178,12 @@ Lets enable these languages in the `devenv.nix` file.
 > + };
 > ```
 >
-> This feature uses [nix-community/fenix][fenix] under the hood.
+> This feature uses [oxalica/rust-overlay][rust-overlay] under the hood.
 > devenv will prompt you do add it as an input to your `devenv.yaml`.
-> You can do so throught the command-line:
+> You can do so through the command-line:
 >
 > ```console
-> devenv inputs add fenix github:nix-community/fenix --follows nixpkgs
+> devenv inputs add rust-overlay github:oxalica/rust-overlay --follows nixpkgs
 > ```
 
 ### Services
@@ -204,7 +217,7 @@ languages.elm.enable = true;
 + };
 ```
 
-Luanch the services with:
+Launch the services with:
 
 ```console
 devenv up
@@ -250,7 +263,7 @@ services.postgres = {
 +   pkgs.openssl
 +   pkgs.sqlx-cli
 +   pkgs.cargo-watch
-+   pkgs.elmPackages.elm-land
++   pkgs.elm-land
 + ];
 +
 + processes.backend.exec = "cd backend && cargo watch -x run";
@@ -274,6 +287,114 @@ This will ensure that the backend process only starts after the `opensearch` and
 +
 ```
 
-[fenix]: https://github.com/nix-community/fenix
+You should now have a fully working development environment to run Flakestry!
+
+Go to http://localhost:8888 to see it working.
+
+There's an app in the repo to test out publishing to Flakestry.
+Lets add it as a script.
+
+```diff
++ scripts.flakestry-publish.exec = "cd backend && cargo run --bin publish -- $@";
+```
+
+Create a GitHub token with no extra permissions: https://github.com/settings/personal-access-tokens/new
+
+```console
+export GITHUB_TOKEN=your-token
+```
+
+or if you have `gh` installed:
+
+```console
+export GITHUB_TOKEN=$(gh auth token)
+```
+
+Let's try it out:
+
+```
+flakestry-publish --owner nixos --repo nixpkgs --version 25.11
+```
+
+### Final devenv.nix
+
+```nix title="devenv.nix"
+{ pkgs, lib, config, inputs, ... }:
+{
+  dotenv.enable = true;
+
+  packages =
+    [
+      pkgs.openssl
+      pkgs.cargo-watch
+      pkgs.elm-land
+      pkgs.sqlx-cli
+    ];
+
+  languages.rust = {
+    enable = true;
+    channel = "stable";
+  };
+
+  languages.javascript = {
+    enable = true;
+    npm.install.enable = true;
+  };
+
+  languages.typescript.enable = true;
+
+  languages.elm.enable = true;
+
+  services.caddy.enable = true;
+  services.caddy.config = builtins.readFile ./Caddyfile;
+
+  services.opensearch.enable = true;
+
+  services.postgres = {
+    enable = true;
+    listen_addresses = "localhost";
+    port = 5431;
+    initialDatabases = [ { name = "flakestry"; } ];
+  };
+
+  scripts.run-migrations.exec =  "sqlx migrate run";
+  scripts.flakestry-publish.exec = "cd backend && cargo run --bin publish -- $@";
+
+  processes = {
+    backend = {
+      exec = "cd backend && cargo watch -x run";
+      process-compose.depends_on = {
+        opensearch.condition = "process_healthy";
+        postgres.condition = "process_healthy";
+      };
+    };
+    frontend.exec = "cd frontend && elm-land server";
+  };
+
+  git-hooks = {
+    hooks = {
+      rustfmt.enable = true;
+      rustfmt.packageOverrides.rustfmt = config.languages.rust.toolchain.rustfmt;
+
+      nixfmt.enable = true;
+
+      elm-format.enable = true;
+    };
+    settings.rust.cargoManifestPath = "./backend/Cargo.toml";
+  };
+}
+```
+
+### Contributing
+
+Join us on [Discord][discord] if you have questions, thoughts, or suggestions.
+
+If you find bugs, open an issue on https://github.com/cachix/devenv/issues.
+
+
+
+
+[rust-overlay]: https://github.com/oxalica/rust-overlay
 [process-compose]: https://devenv.sh/supported-process-managers/process-compose/
 [project-readme]: ./PROJECT_README.md
+[discord]: https://discord.gg/naMgvexb6q
