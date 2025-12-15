@@ -2,21 +2,14 @@
 {
   dotenv.enable = true;
 
-  packages =
-    [
-      pkgs.openssl
-      pkgs.cargo-watch
-      pkgs.elmPackages.elm-land
-      pkgs.sqlx-cli
-      pkgs.flyctl
-      pkgs.openapi-generator-cli
-    ]
-    ++ lib.optionals pkgs.stdenv.isDarwin [
-      pkgs.darwin.CF
-      pkgs.darwin.Security
-      pkgs.darwin.configd
-      pkgs.darwin.dyld
-    ];
+  packages = [
+    pkgs.openssl
+    pkgs.cargo-watch
+    pkgs.elm-land
+    pkgs.sqlx-cli
+    pkgs.flyctl
+    pkgs.openapi-generator-cli
+  ];
 
   languages.javascript = {
     enable = true;
@@ -88,14 +81,14 @@
     frontend.exec = "cd frontend && elm-land server";
   };
 
-  pre-commit = {
+  git-hooks = {
     hooks = {
       rustfmt.enable = true;
       # TODO: upstream
       # rustfmt.packageOverrides.rustfmt = config.languages.rust.toolchain.rustfmt;
 
       shellcheck.enable = true;
-      nixfmt-rfc-style.enable = true;
+      nixfmt.enable = true;
       elm-format.enable = true;
     };
     settings.rust.cargoManifestPath = "./backend/Cargo.toml";

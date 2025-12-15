@@ -3,10 +3,10 @@
     "devenv": {
       "locked": {
         "dir": "src/modules",
-        "lastModified": 1733323168,
+        "lastModified": 1765800147,
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "efa9010b8b1cfd5dd3c7ed1e172a470c3b84a064",
+        "rev": "ada06017aef4941e91aabe7507e33d750757ae0c",
         "type": "github"
       },
       "original": {
@@ -16,34 +16,13 @@
         "type": "github"
       }
     },
-    "fenix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-analyzer-src": "rust-analyzer-src"
-      },
-      "locked": {
-        "lastModified": 1714397108,
-        "owner": "sandydoo",
-        "repo": "fenix",
-        "rev": "111b2aea9d2ac261c6f0a4aac4bde6c0e8c5bb3d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "sandydoo",
-        "ref": "patch-rust-analyzer-preview",
-        "repo": "fenix",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1733328505,
+        "lastModified": 1765121682,
         "owner": "edolstra",
         "repo": "flake-compat",
-        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
+        "rev": "65f23138d8d09a92e30f1e5c87611b23ef451bf3",
         "type": "github"
       },
       "original": {
@@ -58,14 +37,13 @@
         "gitignore": "gitignore",
         "nixpkgs": [
           "nixpkgs"
-        ],
-        "nixpkgs-stable": "nixpkgs-stable"
+        ]
       },
       "locked": {
-        "lastModified": 1733318908,
+        "lastModified": 1765464257,
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "6f4e2a2112050951a314d2733a994fbab94864c6",
+        "rev": "09e45f2598e1a8499c3594fe11ec2943f34fe509",
         "type": "github"
       },
       "original": {
@@ -82,10 +60,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1709087332,
+        "lastModified": 1762808025,
         "owner": "hercules-ci",
         "repo": "gitignore.nix",
-        "rev": "637db329424fd7e46cf4185293b9cc8c88c95394",
+        "rev": "cb5e3fdca1de58ccbc3ef53de65bd372b48f567c",
         "type": "github"
       },
       "original": {
@@ -96,10 +74,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1716977621,
+        "lastModified": 1764580874,
         "owner": "cachix",
         "repo": "devenv-nixpkgs",
-        "rev": "4267e705586473d3e5c8d50299e71503f16a6fb6",
+        "rev": "dcf61356c3ab25f1362b4a4428a6d871e84f1d1d",
         "type": "github"
       },
       "original": {
@@ -109,45 +87,33 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1733220138,
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "bcb68885668cccec12276bbb379f8f2557aa06ce",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "devenv": "devenv",
-        "fenix": "fenix",
         "git-hooks": "git-hooks",
         "nixpkgs": "nixpkgs",
         "pre-commit-hooks": [
           "git-hooks"
-        ]
+        ],
+        "rust-overlay": "rust-overlay"
       }
     },
-    "rust-analyzer-src": {
-      "flake": false,
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1733240392,
-        "owner": "rust-lang",
-        "repo": "rust-analyzer",
-        "rev": "e6276c8b641c05f2e5d2bbe941726a5fea12d803",
+        "lastModified": 1765766816,
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "4f53a635709d82652567f51ef7af4365fbc0c88b",
         "type": "github"
       },
       "original": {
-        "owner": "rust-lang",
-        "ref": "nightly",
-        "repo": "rust-analyzer",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
         "type": "github"
       }
     }
