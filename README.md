@@ -112,8 +112,8 @@ Lets remove the default configuration and start from scratch.
 -    git --version | grep --color=auto "${pkgs.git.version}"
 -  '';
 -
--  # https://devenv.sh/pre-commit-hooks/
--  # pre-commit.hooks.shellcheck.enable = true;
+-  # https://devenv.sh/git-hooks/
+-  # git-hooks.hooks.shellcheck.enable = true;
 -
 -  # See full reference at https://devenv.sh/reference/options/
 }
@@ -178,12 +178,12 @@ Lets enable these languages in the `devenv.nix` file.
 > + };
 > ```
 >
-> This feature uses [nix-community/fenix][fenix] under the hood.
+> This feature uses [oxalica/rust-overlay][rust-overlay] under the hood.
 > devenv will prompt you do add it as an input to your `devenv.yaml`.
-> You can do so throught the command-line:
+> You can do so through the command-line:
 >
 > ```console
-> devenv inputs add fenix github:nix-community/fenix --follows nixpkgs
+> devenv inputs add rust-overlay github:oxalica/rust-overlay --follows nixpkgs
 > ```
 
 ### Services
@@ -263,25 +263,12 @@ services.postgres = {
 +   pkgs.openssl
 +   pkgs.sqlx-cli
 +   pkgs.cargo-watch
-+   pkgs.elmPackages.elm-land
++   pkgs.elm-land
 + ];
 +
 + processes.backend.exec = "cd backend && cargo watch -x run";
 + processes.frontend.exec = "cd frontend && elm-land server"
 ```
-
-> [!TIP]
-> For macOS users, the Rust backend requires a few macOS frameworks.
-> ```diff
->    pkgs.elmPackages.elm-land
-> + ]
-> + # For macOS machines
-> | ++ lib.optionals pkgs.stdenv.isDarwin [
-> +   pkgs.darwin.CF
-> +   pkgs.darwin.Security
-> +   pkgs.darwin.configd
-> +   pkgs.darwin.dyld
-> + ];
 
 The backend process might fail to initialize properly if the opensearch cluster is not ready at the time of launch.
 
@@ -326,7 +313,7 @@ export GITHUB_TOKEN=$(gh auth token)
 Let's try it out:
 
 ```
-flakestry-publish --owner nixos --repo nixpkgs --version 24.05
+flakestry-publish --owner nixos --repo nixpkgs --version 25.11
 ```
 
 ### Final devenv.nix
@@ -340,15 +327,8 @@ flakestry-publish --owner nixos --repo nixpkgs --version 24.05
     [
       pkgs.openssl
       pkgs.cargo-watch
-      pkgs.elmPackages.elm-land
+      pkgs.elm-land
       pkgs.sqlx-cli
-    ]
-    # For macOS machines
-    ++ lib.optionals pkgs.stdenv.isDarwin [
-      pkgs.darwin.CF
-      pkgs.darwin.Security
-      pkgs.darwin.configd
-      pkgs.darwin.dyld
     ];
 
   languages.rust = {
@@ -391,12 +371,12 @@ flakestry-publish --owner nixos --repo nixpkgs --version 24.05
     frontend.exec = "cd frontend && elm-land server";
   };
 
-  pre-commit = {
+  git-hooks = {
     hooks = {
       rustfmt.enable = true;
       rustfmt.packageOverrides.rustfmt = config.languages.rust.toolchain.rustfmt;
 
-      nixfmt-rfc-style.enable = true;
+      nixfmt.enable = true;
 
       elm-format.enable = true;
     };
@@ -414,7 +394,7 @@ If you find bugs, open an issue on https://github.com/cachix/devenv/issues.
 
 
 
-[fenix]: https://github.com/nix-community/fenix
+[rust-overlay]: https://github.com/oxalica/rust-overlay
 [process-compose]: https://devenv.sh/supported-process-managers/process-compose/
 [project-readme]: ./PROJECT_README.md
 [discord]: https://discord.gg/naMgvexb6q
